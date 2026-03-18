@@ -110,7 +110,7 @@
             <div class="hero-content">
                 <h1 class="reveal-item">Desarrollo de Software Más Inteligente</h1>
                 <p class="reveal-item">Potencia a tu equipo con herramientas de desarrollo SaaS potentes y fáciles de usar.</p>
-                <a href="#" class="cta-button elegant-cta reveal-item">Demos</a>
+                <a href="#contact" class="cta-button elegant-cta reveal-item">Contactar</a>
             </div>
         </section>
         <!-- ====================================================== -->
@@ -249,7 +249,7 @@
                         <li><i class="fas fa-check"></i> 1 funcionalidad principal</li>
                         <li><i class="fas fa-check"></i> Deploy básico</li>
                     </ul>
-                    <a href="#" class="plan-button">Solicitar propuesta</a>
+                    <a href="#contact" class="plan-button" onclick="setSubject('Plan MVP')">Solicitar propuesta</a>
                 </div>
 
                 <!-- Plan 2: Business (Popular) -->
@@ -266,7 +266,7 @@
                         <li><i class="fas fa-check"></i> Sistema completo + base de datos</li>
                         <li><i class="fas fa-check"></i> Integraciones(pagos, APIs)</li>
                     </ul>
-                    <a href="#" class="plan-button popular-button">Solicitar propuesta</a>
+                    <a href="#contact" class="plan-button popular-button" onclick="setSubject('Plan Profesional')">Solicitar propuesta</a>
                 </div>
 
                 <!-- Plan 3: Enterprise -->
@@ -283,7 +283,7 @@
                         <li><i class="fas fa-check"></i> Arquitectura escalable</li>
                         <li><i class="fas fa-check"></i> Soporte dedicado</li>
                     </ul>
-                    <a href="#" class="plan-button">Contactar</a>
+                    <a href="#contact" class="plan-button" onclick="setSubject('Plan a Medida')">Contactar</a>
                 </div>
             </div>
         </section>
@@ -434,7 +434,7 @@
                     </ul>
                 </div>
 
-                <form class="contact-form reveal-item">
+                <form action="https://formspree.io/f/mpqyogrd" method="POST" class="contact-form reveal-item">
                     <div class="form-group">
                         <input type="text" id="name" name="name" required placeholder=" ">
                         <label for="name">Nombre</label>
@@ -518,6 +518,57 @@
     <!-- ====================================================== -->
     <!-- END: REPLACEMENT FOR FOOTER SECTION                    -->
     <!-- ====================================================== -->
+<script>
+  // 1. La función para los botones de los planes (ponla una sola vez)
+  function setSubject(planName) {
+      const subjectInput = document.getElementById('subject');
+      if (subjectInput) {
+          subjectInput.value = "Interés en:  " + planName;
+          // Esto ayuda a que el label no se encime si usas animaciones CSS
+          subjectInput.dispatchEvent(new Event('input')); 
+      }
+  }
+</script>
+    <script>
+  const $form = document.querySelector('.contact-form');
+
+  $form.addEventListener('submit', async (event) => {
+    event.preventDefault(); // Evita que la página se recargue o se vaya a Formspree
+    
+    const formData = new FormData($form);
+    const button = $form.querySelector('.submit-button');
+    const originalText = button.innerText;
+
+    button.innerText = "Enviando...";
+    button.disabled = true;
+
+    const response = await fetch($form.action, {
+      method: $form.method,
+      body: formData,
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+
+    if (response.ok) {
+      $form.reset(); // ¡Aquí es donde se limpian los campos!
+      button.innerText = "¡Mensaje Enviado!";
+      button.style.backgroundColor = "#28a745"; // Opcional: cambia a verde
+      
+      setTimeout(() => {
+        button.innerText = originalText;
+        button.disabled = false;
+        button.style.backgroundColor = ""; // Vuelve al color original
+      }, 4000);
+    } else {
+      alert("Huy, algo salió mal. Por favor intenta de nuevo.");
+      button.innerText = originalText;
+      button.disabled = false;
+    }
+  });
+</script>
+
+
 
 </body>
 
